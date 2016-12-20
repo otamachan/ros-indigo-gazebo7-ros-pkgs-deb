@@ -9,10 +9,12 @@ fi
 # add ros plugin if does not exist
 if [ `expr "$final" : ".*libgazebo_ros_paths_plugin\.$EXT.*"` -eq 0 ]
 then
-    final="$final -g `catkin_find --first-only libgazebo_ros_paths_plugin.$EXT`"
+    final="$final -g `catkin_find --first-only gazebo7/libgazebo_ros_paths_plugin.$EXT`"
 fi
 
-setup_path=$(pkg-config --variable=prefix gazebo)/share/gazebo/
+setup_path=$(pkg-config --variable=prefix gazebo7)/share/gazebo-7/
+
+LD_LIBRARY_PATH=/opt/ros/indigo/lib/gazebo7:${LD_LIBRARY_PATH}
 
 # source setup.sh, but keep local modifications to GAZEBO_MASTER_URI
 desired_master_uri="$GAZEBO_MASTER_URI"
@@ -22,4 +24,4 @@ if [ "$desired_master_uri" = "" ]; then
 fi
 
 # Combine the commands
-GAZEBO_MASTER_URI="$desired_master_uri" gzclient $final
+GAZEBO_MASTER_URI="$desired_master_uri" gzclient7 $final

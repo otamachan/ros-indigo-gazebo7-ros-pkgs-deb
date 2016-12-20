@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(gazebo_plugins)
+project(gazebo7_plugins)
 
 find_package(catkin REQUIRED COMPONENTS 
   message_generation 
@@ -39,7 +39,7 @@ else()
 endif()
 
 # Depend on system install of Gazebo and SDFormat
-find_package(gazebo REQUIRED)
+find_package(gazebo7 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS thread)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
@@ -49,7 +49,7 @@ execute_process(COMMAND
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
-catkin_python_setup()
+#catkin_python_setup()
 
 generate_dynamic_reconfigure_options(
   cfg/CameraSynchronizer.cfg
@@ -86,7 +86,7 @@ if (NOT GAZEBO_VERSION VERSION_LESS 7.3)
 endif()
 
 catkin_package(
-  INCLUDE_DIRS include
+  INCLUDE_DIRS include/gazebo_plugins
   LIBRARIES 
   vision_reconfigure 
   gazebo_ros_utils 
@@ -322,25 +322,25 @@ install(TARGETS
   gazebo_ros_gpu_laser
   gazebo_ros_range
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}/gazebo7
   )
 
 if (NOT GAZEBO_VERSION VERSION_LESS 6.0)
   install(TARGETS gazebo_ros_elevator
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}/gazebo7
     )
 endif()
 
 if (NOT GAZEBO_VERSION VERSION_LESS 7.3)
   install(TARGETS gazebo_ros_harness
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}/gazebo7
     )
 endif()
 
 install(DIRECTORY include/
-   DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
+   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
    FILES_MATCHING PATTERN "*.h"
 )
 

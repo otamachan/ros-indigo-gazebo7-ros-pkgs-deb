@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(gazebo_ros_control)
+project(gazebo7_ros_control)
 
 # Load catkin and all dependencies required for this package
 find_package(catkin REQUIRED COMPONENTS
@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 # Depend on system install of Gazebo 
-find_package(gazebo REQUIRED)
+find_package(gazebo7 REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
 catkin_package(
@@ -31,7 +31,7 @@ catkin_package(
     joint_limits_interface
     urdf
     angles
-  INCLUDE_DIRS include
+  INCLUDE_DIRS include/gazebo_ros_control
   LIBRARIES ${PROJECT_NAME} default_robot_hw_sim
   DEPENDS gazebo
 )
@@ -57,10 +57,10 @@ target_link_libraries(default_robot_hw_sim ${catkin_LIBRARIES} ${GAZEBO_LIBRARIE
 
 ## Install
 install(TARGETS ${PROJECT_NAME} default_robot_hw_sim
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}/gazebo7
   )
 
-install(DIRECTORY include/${PROJECT_NAME}/
+install(DIRECTORY include/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   )
 

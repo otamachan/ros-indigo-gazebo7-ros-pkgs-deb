@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(gazebo_ros)
+project(gazebo7_ros)
 
 find_package(catkin REQUIRED COMPONENTS
   cmake_modules
@@ -23,14 +23,14 @@ else()
 endif()
 
 # Depend on system install of Gazebo
-find_package(gazebo REQUIRED)
+find_package(gazebo7 REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
 find_package(Boost REQUIRED COMPONENTS thread)
 
 find_package(TinyXML REQUIRED)
 
-catkin_python_setup()
+#catkin_python_setup()
 
 generate_dynamic_reconfigure_options(cfg/Physics.cfg)
 
@@ -92,7 +92,7 @@ target_link_libraries(gazebo_ros_paths_plugin ${GAZEBO_LIBRARIES} ${SDFormat_LIB
 
 # Install Gazebo System Plugins
 install(TARGETS gazebo_ros_api_plugin gazebo_ros_paths_plugin
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}/gazebo7
   )
 
 # Install Gazebo Scripts
