@@ -1,0 +1,273 @@
+From: Tamaki Nishino <otamachan@gmail.com>
+Date: Tue, 20 Dec 2016 14:39:38 +0900
+Subject: Use gazebo7
+
+---
+ gazebo_plugins/CMakeLists.txt        | 16 ++++++++--------
+ gazebo_plugins/package.xml           |  2 +-
+ gazebo_ros/CMakeLists.txt            |  8 ++++----
+ gazebo_ros/launch/empty_world.launch |  4 ++--
+ gazebo_ros/package.xml               |  2 +-
+ gazebo_ros/scripts/gzclient          |  8 +++++---
+ gazebo_ros/scripts/gzserver          | 10 ++++++----
+ gazebo_ros_control/CMakeLists.txt    | 10 +++++-----
+ gazebo_ros_control/package.xml       |  2 +-
+ 9 files changed, 33 insertions(+), 29 deletions(-)
+
+diff --git a/gazebo_plugins/CMakeLists.txt b/gazebo_plugins/CMakeLists.txt
+index d2c31c2..c848b82 100644
+--- a/gazebo_plugins/CMakeLists.txt
++++ b/gazebo_plugins/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ cmake_minimum_required(VERSION 2.8.3)
+-project(gazebo_plugins)
++project(gazebo7_plugins)
+ 
+ find_package(catkin REQUIRED COMPONENTS 
+   message_generation 
+@@ -39,7 +39,7 @@ else()
+ endif()
+ 
+ # Depend on system install of Gazebo and SDFormat
+-find_package(gazebo REQUIRED)
++find_package(gazebo7 REQUIRED)
+ find_package(Boost REQUIRED COMPONENTS thread)
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
+ 
+@@ -49,7 +49,7 @@ execute_process(COMMAND
+   OUTPUT_STRIP_TRAILING_WHITESPACE
+ )
+ 
+-catkin_python_setup()
++#catkin_python_setup()
+ 
+ generate_dynamic_reconfigure_options(
+   cfg/CameraSynchronizer.cfg
+@@ -86,7 +86,7 @@ if (NOT GAZEBO_VERSION VERSION_LESS 7.3)
+ endif()
+ 
+ catkin_package(
+-  INCLUDE_DIRS include
++  INCLUDE_DIRS include/gazebo_plugins
+   LIBRARIES 
+   vision_reconfigure 
+   gazebo_ros_utils 
+@@ -322,25 +322,25 @@ install(TARGETS
+   gazebo_ros_gpu_laser
+   gazebo_ros_range
+   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
++  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}/gazebo7
+   )
+ 
+ if (NOT GAZEBO_VERSION VERSION_LESS 6.0)
+   install(TARGETS gazebo_ros_elevator
+     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+-    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
++    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}/gazebo7
+     )
+ endif()
+ 
+ if (NOT GAZEBO_VERSION VERSION_LESS 7.3)
+   install(TARGETS gazebo_ros_harness
+     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+-    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
++    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}/gazebo7
+     )
+ endif()
+ 
+ install(DIRECTORY include/
+-   DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
++   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+    FILES_MATCHING PATTERN "*.h"
+ )
+ 
+diff --git a/gazebo_plugins/package.xml b/gazebo_plugins/package.xml
+index e962fad..f8c1a1b 100644
+--- a/gazebo_plugins/package.xml
++++ b/gazebo_plugins/package.xml
+@@ -1,5 +1,5 @@
+ <package>
+-  <name>gazebo_plugins</name>
++  <name>gazebo7_plugins</name>
+   <version>2.4.12</version>
+   <description>
+     Robot-independent Gazebo plugins for sensors, motors and dynamic reconfigurable components.
+diff --git a/gazebo_ros/CMakeLists.txt b/gazebo_ros/CMakeLists.txt
+index 66a59c7..68c867a 100644
+--- a/gazebo_ros/CMakeLists.txt
++++ b/gazebo_ros/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ cmake_minimum_required(VERSION 2.8.3)
+-project(gazebo_ros)
++project(gazebo7_ros)
+ 
+ find_package(catkin REQUIRED COMPONENTS
+   cmake_modules
+@@ -23,14 +23,14 @@ else()
+ endif()
+ 
+ # Depend on system install of Gazebo
+-find_package(gazebo REQUIRED)
++find_package(gazebo7 REQUIRED)
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
+ 
+ find_package(Boost REQUIRED COMPONENTS thread)
+ 
+ find_package(TinyXML REQUIRED)
+ 
+-catkin_python_setup()
++#catkin_python_setup()
+ 
+ generate_dynamic_reconfigure_options(cfg/Physics.cfg)
+ 
+@@ -92,7 +92,7 @@ target_link_libraries(gazebo_ros_paths_plugin ${GAZEBO_LIBRARIES} ${SDFormat_LIB
+ 
+ # Install Gazebo System Plugins
+ install(TARGETS gazebo_ros_api_plugin gazebo_ros_paths_plugin
+-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
++  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}/gazebo7
+   )
+ 
+ # Install Gazebo Scripts
+diff --git a/gazebo_ros/launch/empty_world.launch b/gazebo_ros/launch/empty_world.launch
+index cb4637a..576c414 100644
+--- a/gazebo_ros/launch/empty_world.launch
++++ b/gazebo_ros/launch/empty_world.launch
+@@ -27,12 +27,12 @@
+   <arg     if="$(arg debug)" name="script_type" value="debug"/>
+ 
+   <!-- start gazebo server-->
+-  <node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="false" output="screen"
++  <node name="gazebo" pkg="gazebo7_ros" type="$(arg script_type)" respawn="false" output="screen"
+ 	args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) $(arg extra_gazebo_args) $(arg world_name)" />
+ 	
+   <!-- start gazebo client -->
+   <group if="$(arg gui)">
+-    <node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
++    <node name="gazebo_gui" pkg="gazebo7_ros" type="gzclient" respawn="false" output="screen"/>
+   </group>
+ 
+ </launch>
+diff --git a/gazebo_ros/package.xml b/gazebo_ros/package.xml
+index a489be1..77c243c 100644
+--- a/gazebo_ros/package.xml
++++ b/gazebo_ros/package.xml
+@@ -1,6 +1,6 @@
+ <?xml version="1.0"?>
+ <package>
+-  <name>gazebo_ros</name>
++  <name>gazebo7_ros</name>
+   <version>2.4.12</version>
+   <description>
+     Provides ROS plugins that offer message and service publishers for interfacing with <a href="http://gazebosim.org">Gazebo</a> through ROS.
+diff --git a/gazebo_ros/scripts/gzclient b/gazebo_ros/scripts/gzclient
+index dfe0f56..2086550 100755
+--- a/gazebo_ros/scripts/gzclient
++++ b/gazebo_ros/scripts/gzclient
+@@ -9,10 +9,12 @@ fi
+ # add ros plugin if does not exist
+ if [ `expr "$final" : ".*libgazebo_ros_paths_plugin\.$EXT.*"` -eq 0 ]
+ then
+-    final="$final -g `catkin_find --first-only libgazebo_ros_paths_plugin.$EXT`"
++    final="$final -g `catkin_find --first-only gazebo7/libgazebo_ros_paths_plugin.$EXT`"
+ fi
+ 
+-setup_path=$(pkg-config --variable=prefix gazebo)/share/gazebo/
++setup_path=$(pkg-config --variable=prefix gazebo7)/share/gazebo-7/
++
++LD_LIBRARY_PATH=/opt/ros/indigo/lib/gazebo7:${LD_LIBRARY_PATH}
+ 
+ # source setup.sh, but keep local modifications to GAZEBO_MASTER_URI
+ desired_master_uri="$GAZEBO_MASTER_URI"
+@@ -22,4 +24,4 @@ if [ "$desired_master_uri" = "" ]; then
+ fi
+ 
+ # Combine the commands
+-GAZEBO_MASTER_URI="$desired_master_uri" gzclient $final
++GAZEBO_MASTER_URI="$desired_master_uri" gzclient7 $final
+diff --git a/gazebo_ros/scripts/gzserver b/gazebo_ros/scripts/gzserver
+index 6681b7f..6a0896b 100755
+--- a/gazebo_ros/scripts/gzserver
++++ b/gazebo_ros/scripts/gzserver
+@@ -9,16 +9,18 @@ fi
+ # add ros path plugin if it does not already exist in the passed in arguments
+ if [ `expr "$final" : ".*libgazebo_ros_paths_plugin\.$EXT.*"` -eq 0 ]
+ then
+-    final="$final -s `catkin_find --first-only libgazebo_ros_paths_plugin.$EXT`"
++    final="$final -s `catkin_find --first-only gazebo7/libgazebo_ros_paths_plugin.$EXT`"
+ fi
+ 
+ # add ros api plugin if it does not already exist in the passed in arguments
+ if [ `expr "$final" : ".*libgazebo_ros_api_plugin\.$EXT.*"` -eq 0 ]
+ then
+-    final="$final -s `catkin_find --first-only libgazebo_ros_api_plugin.$EXT`"
++    final="$final -s `catkin_find --first-only gazebo7/libgazebo_ros_api_plugin.$EXT`"
+ fi
+ 
+-setup_path=$(pkg-config --variable=prefix gazebo)/share/gazebo/
++setup_path=$(pkg-config --variable=prefix gazebo7)/share/gazebo-7/
++
++LD_LIBRARY_PATH=/opt/ros/indigo/lib/gazebo7:${LD_LIBRARY_PATH}
+ 
+ # source setup.sh, but keep local modifications to GAZEBO_MASTER_URI
+ desired_master_uri="$GAZEBO_MASTER_URI"
+@@ -27,4 +29,4 @@ if [ "$desired_master_uri" = "" ]; then
+ 	desired_master_uri="$GAZEBO_MASTER_URI"
+ fi
+ 
+-GAZEBO_MASTER_URI="$desired_master_uri" gzserver $final
++GAZEBO_MASTER_URI="$desired_master_uri" gzserver7 $final
+diff --git a/gazebo_ros_control/CMakeLists.txt b/gazebo_ros_control/CMakeLists.txt
+index cf228b0..1f277b5 100644
+--- a/gazebo_ros_control/CMakeLists.txt
++++ b/gazebo_ros_control/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ cmake_minimum_required(VERSION 2.8.3)
+-project(gazebo_ros_control)
++project(gazebo7_ros_control)
+ 
+ # Load catkin and all dependencies required for this package
+ find_package(catkin REQUIRED COMPONENTS
+@@ -16,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
+ )
+ 
+ # Depend on system install of Gazebo 
+-find_package(gazebo REQUIRED)
++find_package(gazebo7 REQUIRED)
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
+ 
+ catkin_package(
+@@ -31,7 +31,7 @@ catkin_package(
+     joint_limits_interface
+     urdf
+     angles
+-  INCLUDE_DIRS include
++  INCLUDE_DIRS include/gazebo_ros_control
+   LIBRARIES ${PROJECT_NAME} default_robot_hw_sim
+   DEPENDS gazebo
+ )
+@@ -57,10 +57,10 @@ target_link_libraries(default_robot_hw_sim ${catkin_LIBRARIES} ${GAZEBO_LIBRARIE
+ 
+ ## Install
+ install(TARGETS ${PROJECT_NAME} default_robot_hw_sim
+-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
++  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}/gazebo7
+   )
+ 
+-install(DIRECTORY include/${PROJECT_NAME}/
++install(DIRECTORY include/
+   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+   )
+ 
+diff --git a/gazebo_ros_control/package.xml b/gazebo_ros_control/package.xml
+index dd49fe8..b2abd14 100644
+--- a/gazebo_ros_control/package.xml
++++ b/gazebo_ros_control/package.xml
+@@ -1,5 +1,5 @@
+ <package>
+-  <name>gazebo_ros_control</name>
++  <name>gazebo7_ros_control</name>
+   <version>2.4.12</version>
+   <description>gazebo_ros_control</description>
+ 

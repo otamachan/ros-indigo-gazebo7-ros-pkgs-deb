@@ -1,0 +1,19 @@
+From: Tamaki Nishino <otamachan@gmail.com>
+Date: Tue, 20 Dec 2016 14:47:13 +0900
+Subject: Add CMAkeLists.txt
+
+---
+ CMakeLists.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 CMakeLists.txt
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..20ea5e3
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,4 @@
++cmake_minimum_required(VERSION 2.8.3)
++add_subdirectory(gazebo_ros)
++add_subdirectory(gazebo_plugins)
++add_subdirectory(gazebo_ros_control)
