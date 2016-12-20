@@ -1,0 +1,5 @@
+ros-indigo-gazebo7-ros-pkgs (2.4.12-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Tamaki Nishino <otamachan@gmail.com>  Sat, 17 Dec 2016 13:44:45 +0900

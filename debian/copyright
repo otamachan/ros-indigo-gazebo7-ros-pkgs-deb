@@ -1,0 +1,7 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: ros-indigo-gazebo7-ros-pkgs
+Source: https://github.com/ros-simulation/gazebo_ros_pkgs
+
+Files: debian/*
+Copyright: 2016 Tamaki Nishino <otamachan@gmail.com>
+License: BSD-3

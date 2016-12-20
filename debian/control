@@ -1,0 +1,12 @@
+Source: ros-indigo-gazebo7-ros-pkgs
+Section: misc
+Priority: extra
+Maintainer: Tamaki Nishino <otamachan@gmail.com>
+Build-Depends: debhelper (>= 9.0.0)
+Standards-Version: 3.9.4
+Homepage: https://github.com/ros-simulation/gazebo_ros_pkgs
+
+Package: ros-indigo-gazebo7-ros-pkgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: gazebo_ros_pkgs for Gazebo7 and Indigo
